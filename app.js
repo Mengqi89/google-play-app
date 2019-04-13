@@ -15,7 +15,7 @@ app.get('/apps', (req, res) => {
         res.json(playstore);
     }
 
-    sort.toLowerCase();
+    
 
     if (sort) {
         if (!['rating', 'app'].includes(sort)) {
@@ -26,6 +26,7 @@ app.get('/apps', (req, res) => {
     }
 
     if (sort === 'rating') {
+        sort.toLowerCase();
         playstore
             .sort((a, b) => {
             return a["Rating"] > b["Rating"] ? -1 : a["Rating"] < b["Rating"] ? 1 : 0;
@@ -33,12 +34,33 @@ app.get('/apps', (req, res) => {
     }
 
     if (sort === "app") {
+        sort.toLowerCase();
         playstore.sort((a, b) => {
             return a["App"] < b["App"] ? -1 : a["App"] > b["App"] ? 1 : 0; 
         })
     }
 
-    res.json(playstore);
+    
+    if (sort && !genres) {
+        res.json(playstore);
+    }
+
+    if (genres) {
+        if (!['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'].includes(genres)) {
+            return res
+                .status(400)
+                .send('Sort must be one of Action, Puzzle, Strategy, Casual, Arcade or Card.')
+        }
+    }
+    
+    if(genres) {
+        genres.toLowerCase();
+        res.json(playstore.filter(item => {
+            return item["Genres"].toLowerCase().includes(genres)
+        }))
+    }
+
+ 
 
 })
 
