@@ -44,6 +44,7 @@ app.get('/apps', (req, res) => {
     }
 
     if (genres) {
+        genres.toLowerCase();
         if (!['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'].includes(genres)) {
             return res
                 .status(400)
@@ -52,14 +53,10 @@ app.get('/apps', (req, res) => {
     }
     
     if(genres) {
-        genres.toLowerCase();
         res.json(playstore.filter(item => {
             return item["Genres"].toLowerCase().includes(genres)
         }))
     }
-
- 
-
 })
 
 module.exports = app;
